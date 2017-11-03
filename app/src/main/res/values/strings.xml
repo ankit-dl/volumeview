@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">kotlinTest</string>
+    <string name="title_activity_player">PlayerActivity</string>
+</resources>

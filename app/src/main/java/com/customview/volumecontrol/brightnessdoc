@@ -1,0 +1,107 @@
+
+Android screen brightness control
+Tag: android, exception, null Category: android Author: sairi123 Date: 2011-06-01
+
+Android screen brightness seems to 2.1 + automatic adjustment function, so, when turn on the automatic adjustment function when we adjust not seem to have little effect, which makes me very silent, the results only to judge to see if it opens the screen brightness automatic adjustment feature.
+
+/ **
+* Determine whether to open the automatic brightness adjustment
+*
+* @ Param aContext
+* @ Return
+* /
+public static boolean isAutoBrightness (ContentResolver aContentResolver) {
+The boolean automicBrightness = false;
+try {
+automicBrightness = Settings.System.getInt (aContentResolver,
+Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+} Catch (SettingNotFoundException, e) {
+e.printStackTrace ();
+}
+return automicBrightness;
+}
+
+Then is to find the current brightness, the more tangled:
+
+/ **
+* Get the brightness of the screen
+*
+* @ Param activity
+* @ Return
+* /
+public static int getScreenBrightness (Activity activity) {
+int nowBrightnessValue = 0;
+ContentResolver resolver = activity.getContentResolver ();
+try {
+nowBrightnessValue = android.provider.Settings.System.getInt (
+resolver, Settings.System.SCREEN_BRIGHTNESS);
+} Catch (Exception e) {
+e.printStackTrace ();
+}
+return nowBrightnessValue;
+}
+
+How to modify the brightness of the screen?
+
+/ **
+* Set the brightness
+*
+* @ Param activity
+* @ Param brightness
+* /
+public static void setBrightness (Activity activity, int brightness) {
+/ / Settings.System.putInt (activity.getContentResolver (),
+/ / Settings.System.SCREEN_BRIGHTNESS_MODE
+/ / Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+WindowManager.LayoutParams lp = activity.getWindow (). GetAttributes ();
+lp.screenBrightness = Float.valueOf (brightness) * (1f / 255f);
+activity.getWindow (). setAttributes (lp);
+
+}
+
+Then be able to set up, but why still occur, for set up, did not reflect it?
+
+Hey, that is, open the automatic adjustment function, and how to close it? This is the most important:
+
+/ **
+* Stop the automatic brightness adjustment
+*
+* @ Param activity
+* /
+public static void stopAutoBrightness (Activity activity) {
+Settings.System.putInt (activity.getContentResolver (),
+Settings.System.SCREEN_BRIGHTNESS_MODE
+Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+}
+
+Can open, it naturally should be able to shut down yo yo, that is how close it? Is very simple:
+
+/ **
+* Open automatically adjust the brightness
+*
+* @ Param activity
+* /
+public static void startAutoBrightness (Activity activity) {
+Settings.System.putInt (activity.getContentResolver (),
+Settings.System.SCREEN_BRIGHTNESS_MODE
+Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
+}
+
+This point, it should be said brightness almost have to end!
+
+Hey, would have thought that should be the end, but the tragedy was, since as just now set up, it can only play a role in the current activity, a period of time to exit, you will find no role in the tragedy, the original forget to save the . Khan!
+
+/ **
+* Save the brightness setting state
+*
+* @ Param resolver
+* @ Param brightness
+* /
+public static void saveBrightness (ContentResolver resolver, int brightness) {
+Uri uri = android.provider.Settings.System
+. GetUriFor ("screen_brightness");
+android.provider.Settings.System.putInt (resolver, "screen_brightness",
+brightness);
+/ / Resolver.registerContentObserver (uri, true, myContentObserver);
+resolver.notifyChange (uri, null);
+}
