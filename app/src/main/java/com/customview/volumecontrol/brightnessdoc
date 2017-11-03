@@ -1,8 +1,4 @@
 
-Android screen brightness control
-Tag: android, exception, null Category: android Author: sairi123 Date: 2011-06-01
-
-Android screen brightness seems to 2.1 + automatic adjustment function, so, when turn on the automatic adjustment function when we adjust not seem to have little effect, which makes me very silent, the results only to judge to see if it opens the screen brightness automatic adjustment feature.
 
 / **
 * Determine whether to open the automatic brightness adjustment
